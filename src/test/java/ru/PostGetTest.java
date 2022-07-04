@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Disabled;
 
-public class PostGetTest extends BaseTest {
-
+public class PostGetTest extends Request {
     @Test
     @Disabled("Дополнить скоуп")
     @Description("Проверяем, что схема ответа валидна")
