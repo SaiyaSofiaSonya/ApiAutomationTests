@@ -2,14 +2,20 @@ package ru;
 
 import api.PostApi;
 import io.qameta.allure.Step;
+import io.restassured.common.mapper.TypeRef;
+import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.Response;
+import org.codehaus.groovy.control.messages.Message;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Request extends Specifications{
+public class Request extends Specifications {
     @Step("Отправка get запроса")
     public Response sendGet(String endpoint) {
         return requestSpec.get(endpoint);
@@ -45,13 +51,13 @@ public class Request extends Specifications{
 
     @Step("Проверка количества постов в ответе")
     public void checkPostNumber(Response response, int number) {
-        List<PostApi> posts = response
+        List<PostApi> posts = Arrays.asList(response
                 .then()
                 .extract()
-                .jsonPath()
-                .getList(".", PostApi.class);
+                .response()
+                .as(PostApi[].class, ObjectMapperType.GSON));
         assertThat(posts.size() == number);
-    }
+   }
 
     @Step("Проверка, что ответ не пустой")
     public void checkIfResponseNotEmpty(String response) {
@@ -74,7 +80,7 @@ public class Request extends Specifications{
                 .then()
                 .extract()
                 .response()
-                .jsonPath()
-                .getInt("id");
+                .as(PostApi.class, ObjectMapperType.GSON)
+                .getId();
     }
 }
