@@ -10,11 +10,3 @@
 #### 5. Plugins -> allure -> allure:serve (откроется отчет)
 #### Тесты содержаться в пакете Test
 
-
-# Local run
-
-### Clone repo 'git clone..'
-
-### Run 'mvn clean install '
-
-### Run 'mvn test '
