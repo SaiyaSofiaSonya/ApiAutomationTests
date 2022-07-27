@@ -1,18 +1,28 @@
 package ru;
 
-import api.PostApi;
-import io.qameta.allure.Step;
-import io.restassured.http.ContentType;
-import io.restassured.specification.RequestSpecification;
-import io.restassured.response.Response;
-import java.util.List;
-import java.util.Random;
-import com.github.javafaker.Faker;
+import api.assertions.Assertions;
+import api.requests.Request;
+import core.Endpoints;
+import io.restassured.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.HashSet;
 
 public class BaseTest {
+ protected Request request = new Request();
+ protected Assertions assertions = new Assertions();
+ protected HashSet<Integer>  usedId = new HashSet<>();
 
+ @BeforeAll
+ public static void setupTest() {
+     RestAssured.baseURI = Endpoints.ENDPOINT_POST;
+ }
+
+ @AfterAll
+ public static void clearTestData() {
+//  for (int id: usedId) {
+//   request.deletePost("/" + id);
+//  }
+ }
 }

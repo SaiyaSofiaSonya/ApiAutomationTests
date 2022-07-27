@@ -1,16 +1,16 @@
-package ru;
+package api.generators;
 
-import api.PostApi;
+import api.models.PostApi;
 import com.github.javafaker.Faker;
 
 import java.util.Random;
 
 public class TestDataGenerator {
-    private static final Faker faker = new Faker();
+    private static final Faker FAKER = new Faker();
 
     public static PostApi getRandomPost() {
-        String title = faker.lorem().fixedString(10);
-        String body = faker.lorem().fixedString(50);
+        String title = FAKER.lorem().fixedString(10);
+        String body = FAKER.lorem().fixedString(50);
         int userId = new Random().nextInt(10);
         return new PostApi(userId, title, body);
     }

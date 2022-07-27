@@ -1,20 +1,22 @@
-package ru;
+package ru.posts;
 
+import api.generators.TestDataGenerator;
+import core.Endpoints;
 import io.qameta.allure.Description;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import api.PostApi;
+import api.models.PostApi;
 import io.restassured.response.Response;
+import ru.BaseTest;
 
-public class PostCreationTest extends Request {
+public class PostCreationTest extends BaseTest {
 
     @Test
     @Description("Добавление поста")
     public void newPost() {
         PostApi expectedPost = TestDataGenerator.getRandomPost();
-        String endpoint = Endpoints.ENDPOINT_POST;
-        Response response = sendPost(expectedPost, endpoint);
-        checkResponseStatusOk(response, 201);
+        Response response = request.createPost(expectedPost, "/posts/");
+        assertions.checkResponseStatusOk(response, 201);
     }
 
     @Test
@@ -22,11 +24,12 @@ public class PostCreationTest extends Request {
     @Description("Добавление поста и поиск его в базе")
     public void addNewPostAndGetIt() {
         PostApi expectedPost = TestDataGenerator.getRandomPost();
-        Response responsePost = sendPost(expectedPost, Endpoints.ENDPOINT_POST);
-        checkResponseStatusOk(responsePost, 201);
-        int id = extractId(responsePost);
-        Response responseGet = sendGet(Endpoints.ENDPOINT_POST + id);
+        Response responsePost = request.createPost(expectedPost, "/posts/");
+        assertions.checkResponseStatusOk(responsePost, 201);
+        int id = request.extractId(responsePost);
+        usedId.add(id);
+        Response responseGet = request.getPost("/posts/" + id);
         System.out.println(Endpoints.ENDPOINT_POST + "/" + id);
-        checkResponseStatusOk(responseGet, 201);
+        assertions.checkResponseStatusOk(responseGet, 201);
     }
 }

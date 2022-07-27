@@ -1,33 +1,15 @@
-package ru;
+package api.assertions;
 
-import api.PostApi;
+import api.models.PostApi;
 import io.qameta.allure.Step;
-import io.restassured.common.mapper.TypeRef;
 import io.restassured.mapper.ObjectMapperType;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
-import org.codehaus.groovy.control.messages.Message;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class Request extends Specifications {
-    @Step("Отправка get запроса")
-    public Response sendGet(String endpoint) {
-        return requestSpec.get(endpoint);
-    }
-
-    @Step("Отправка post запроса")
-    public Response sendPost(PostApi expectedPost, String endpoint) {
-        return requestSpec
-                .body(expectedPost)
-                .post(endpoint);
-    }
-
+public class Assertions {
     @Step("Проверяем поля в ответе  в ответе")
     public void checkBodyParams(Response response) {
         try {
@@ -56,12 +38,12 @@ public class Request extends Specifications {
                 .extract()
                 .response()
                 .as(PostApi[].class, ObjectMapperType.GSON));
-        assertThat(posts.size() == number);
-   }
+        org.assertj.core.api.Assertions.assertThat(posts.size() == number);
+    }
 
     @Step("Проверка, что ответ не пустой")
     public void checkIfResponseNotEmpty(String response) {
-        assertThat(response)
+        org.assertj.core.api.Assertions.assertThat(response)
                 .isNotEmpty();
     }
 
@@ -71,16 +53,6 @@ public class Request extends Specifications {
                 .then()
                 .log().ifValidationFails()
                 .assertThat()
-                .body(matchesJsonSchemaInClasspath(schema));
-    }
-
-    @Step("Добавление нового поста и получение id созданного запроса")
-    public int extractId(Response response) {
-        return response
-                .then()
-                .extract()
-                .response()
-                .as(PostApi.class, ObjectMapperType.GSON)
-                .getId();
+                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath(schema));
     }
 }

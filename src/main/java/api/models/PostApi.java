@@ -1,10 +1,11 @@
-package api;
+package api.models;
 
 import lombok.*;
 
 @NoArgsConstructor
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 public class PostApi {
+
     @Getter
     @Setter
     @NonNull
